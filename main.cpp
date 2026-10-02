@@ -6,7 +6,6 @@
 #include <fstream>
 #include "cdt.h"
 
-
 // saveOutputFile
 // 
 // 'tin' is a characterized tet mesh produced by the function above.
@@ -118,7 +117,7 @@ int main(int argc, char* argv[])
 	inputPLC plc;
 	plc.initFromFile(filename, options.find('v') != std::string::npos);
 
-	TetMesh* tin = createSteinerCDT(plc, options.c_str());
+	TetMesh* tin = CDT::createSteinerCDT(plc, options.c_str());
 
 	if (saveOutputFile(*tin, filename, options.c_str()))
 		printf("Finished\n");

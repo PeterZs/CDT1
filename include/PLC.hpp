@@ -699,7 +699,7 @@ public:
             std::reverse(tie.begin(), tie.end());
             f.bounding_edges.insert(f.bounding_edges.end(), tie.begin(), tie.end());
         }
-        else ip_error("Should never get here!\n");
+        else NFG::ip_error("Should never get here!\n");
     }
 };
 
@@ -1477,7 +1477,7 @@ inline bool PLCx::recoverFaceHSi(std::vector<uint64_t>& i_tets, const PLCface& f
     // corrupt the result instead of falling back.
     if (!cavity_ok) {
         if (!f.flat_vertices.empty())
-            ip_error("Hang Si's cavity expansion fails on a flat face with internal vertices.\nTreatment of this very particular case was not implemented!\n");
+            NFG::ip_error("Hang Si's cavity expansion fails on a flat face with internal vertices.\nTreatment of this very particular case was not implemented!\n");
         delmesh.recoverFaceGiftWrap(i_tets, v_orient);
         sisMethodWorks = false;
         for (uint32_t v : top_vertices) v_orient[v] = UNDET_ORIENTATION;
@@ -1760,13 +1760,13 @@ inline bool PLCx::triangleOverlapsFace(const uint64_t c, const uint32_t fi) cons
     if (M[vs[0]] && M[vs[1]] && M[vs[2]]) {
         if (f.triangles.size() == 1) ti = 0; // No need to check if face is a single triangle
         else {
-            implicitPoint3D_BPT b(*V[vs[0]], *V[vs[1]], *V[vs[2]], 0.33, 0.33);
+            IPs::implicitPoint3D_BPT b(*V[vs[0]], *V[vs[1]], *V[vs[2]], 0.33, 0.33);
             for (ti = 0; ti < f.triangles.size(); ti++) {
                 uint32_t lti = f.triangles[ti] * 3;
                 pointType* v1 = V[input_tv[lti]];
                 pointType* v2 = V[input_tv[lti + 1]];
                 pointType* v3 = V[input_tv[lti + 2]];
-                if (genericPoint::pointInTriangle(b, *v1, *v2, *v3)) break;
+                if (pointType::pointInTriangle(b, *v1, *v2, *v3)) break;
             }
         }
     }

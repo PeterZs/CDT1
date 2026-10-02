@@ -9,10 +9,11 @@
 #define USE_MAROTS_METHOD
 
 #include "delaunay.h"
+using namespace Del3D;
 
-typedef genericPoint pointType;
-typedef implicitPoint3D_LNC implicitPoint_LNC;
-typedef explicitPoint3D explicitPoint;
+typedef IPs::genericPoint pointType;
+typedef IPs::implicitPoint3D_LNC implicitPoint_LNC;
+typedef IPs::explicitPoint3D explicitPoint;
 
 typedef TetMesh_t<pointType *> TetMesh_base;
 
@@ -231,7 +232,7 @@ inline uint32_t TetMesh::findEncroachingPoint_exact(const uint32_t ep0, const ui
         for (uint32_t i = 0; i < 4; i++) {
             const uint32_t ui = tn[i];
             if (!marked_vertex[ui]) {
-                if (genericPoint::dotProductSign3D(*vertices[ep0], *vertices[ep1], *vertices[ui]) <= 0) {
+                if (pointType::dotProductSign3D(*vertices[ep0], *vertices[ep1], *vertices[ui]) <= 0) {
                     marked_vertex[ui] = 1;
                     if (enc_pt_i == UINT32_MAX || pointType::inGabrielSphere(*vertices[ui], *vertices[enc_pt_i], *vertices[ep0], *vertices[ep1]) < 0) {
                         enc_pt_i = ui;

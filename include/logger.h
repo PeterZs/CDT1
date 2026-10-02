@@ -15,7 +15,7 @@ inline void startLogging(const char* fn) {
             fclose(log_fp);
             log_fp = fopen("cdt_log.csv", "a");
         }
-        if (log_fp == NULL) ip_error("Can't open cdt_log.csv for logging!\n");
+        if (log_fp == NULL) NFG::ip_error("Can't open cdt_log.csv for logging!\n");
 
         size_t i;
         for (i = strlen(fn); i > 0; i--) if (fn[i - 1] == '\\' || fn[i - 1] == '/') break;

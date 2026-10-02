@@ -78,24 +78,24 @@ void read_OFF_file(const char* filename,
 
     FILE* file = fopen(filename, "r");
     if (file == NULL)
-        ip_error("read_OFF_file: FATAL ERROR "
+        NFG::ip_error("read_OFF_file: FATAL ERROR "
             "cannot open input file.\n");
 
     // Check OFF mark (1st line).
     char file_ext_read[3];
     char file_ext_target[] = { 'O','F','F' };
     if (fscanf(file, "%3c", file_ext_read) == 0)
-        ip_error("read_OFF_file: FATAL ERROR "
+        NFG::ip_error("read_OFF_file: FATAL ERROR "
             "cannot read 1st line of input file\n");
 
     for (uint32_t i = 0; i < 3; i++)
         if (file_ext_read[i] != file_ext_target[i])
-            ip_error("read_OFF_file: FATAL ERROR "
+            NFG::ip_error("read_OFF_file: FATAL ERROR "
                 "1st line of input file is different from OFF\n");
 
     // Reading number of points and triangles.
     if (fscanf(file, " %d %d %*d ", npts, ntri) == 0)
-        ip_error("read_OFF_file: FATAL ERROR 2st line of "
+        NFG::ip_error("read_OFF_file: FATAL ERROR 2st line of "
             "input file do not contanins point and triangles numbers.\n");
 
     if (verbose) std::cout << "file " << filename << " contains " << *npts << " vertices and " << *ntri << " constraints (triangles)\n";
@@ -107,15 +107,15 @@ void read_OFF_file(const char* filename,
     for (uint32_t i = 0; i < (*npts); i++) {
         if (fscanf(file, " %lf %lf %lf ",
             (*vertices_p) + (i * 3), (*vertices_p) + (i * 3 + 1), (*vertices_p) + (i * 3 + 2)) == 0)
-            ip_error("error reading input file\n");
+            NFG::ip_error("error reading input file\n");
     }
 
     uint32_t nv;
     for (uint32_t i = 0; i < (*ntri); i++) {
         if (fscanf(file, " %u %u %u %u ", &nv,
             (*tri_vertices_p) + (i * 3), (*tri_vertices_p) + (i * 3 + 1), (*tri_vertices_p) + (i * 3 + 2)) == 0)
-            ip_error("error reading input file\n");
-        if (nv != 3) ip_error("Non-triangular faces not supported\n");
+            NFG::ip_error("error reading input file\n");
+        if (nv != 3) NFG::ip_error("Non-triangular faces not supported\n");
     }
     fclose(file);
 }
@@ -223,7 +223,7 @@ void read_nodes_and_constraints(double* coords_A, uint32_t npts_A, uint32_t* tri
 
         if (!misAlignment(v1c, v2c, v3c))
         {
-            ip_error("Model has degenerate triangles. Unsupported!\n");
+            NFG::ip_error("Model has degenerate triangles. Unsupported!\n");
             (*ntri)--;
         }
         else i++;
@@ -287,8 +287,8 @@ public:
         uint32_t* tri_vertices_p;
         read_OFF_file(filename, &vertex_p, &npts, &tri_vertices_p, &ntri, verbose);
         if (verbose) printf("File read\n");
-        if (npts == 0) ip_error("Input file has no vertices\n");
-        if (ntri == 0) ip_error("Input file has no triangles\n");
+        if (npts == 0) NFG::ip_error("Input file has no vertices\n");
+        if (ntri == 0) NFG::ip_error("Input file has no triangles\n");
 
         postProcess(vertex_p, npts, tri_vertices_p, ntri, verbose);
 
@@ -314,8 +314,8 @@ public:
         uint32_t num_vertices;
         read_nodes_and_constraints(vertices_p, npts, tri_vertices_p, ntri, &tmp_vertices, &num_vertices, &valid_tri_vertices_p, &num_valid_tris, verbose);
         if (verbose) printf("Valid input built\n");
-        if (num_vertices == 0) ip_error("Input file has no valid vertices\n");
-        if (num_valid_tris == 0) ip_error("Input file has no valid triangles\n");
+        if (num_vertices == 0) NFG::ip_error("Input file has no valid vertices\n");
+        if (num_valid_tris == 0) NFG::ip_error("Input file has no valid triangles\n");
 
         coordinates.resize(3 * num_vertices);
         for (uint32_t i = 0; i < num_vertices; i++) {
